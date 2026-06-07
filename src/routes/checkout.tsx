@@ -103,6 +103,11 @@ function CheckoutPage() {
           line_total: l.lineTotal,
         })),
         placed_at: new Date().toISOString(),
+        time: new Date().toLocaleString("en-PK", {
+          timeZone: "Asia/Karachi",
+          dateStyle: "medium",
+          timeStyle: "short",
+        }),
       };
 
       const res = await fetch(WEBHOOK_URL, {
