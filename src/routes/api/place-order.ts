@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 const WEBHOOK_URL =
-  "https://maxo.app.n8n.cloud/webhook/58004ac5-d674-4526-bb13-17a06469bffd";
+  "https://maxo.app.n8n.cloud/webhook-test/58004ac5-d674-4526-bb13-17a06469bffd";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
