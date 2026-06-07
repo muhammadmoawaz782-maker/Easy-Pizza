@@ -35,7 +35,7 @@ export function PizzaCard({ pizza }: { pizza: Pizza }) {
         </div>
         <p className="text-sm leading-relaxed text-muted-foreground">{pizza.description}</p>
         <div className="mt-auto flex items-center justify-between pt-4">
-          <span className="font-display text-2xl text-foreground">${pizza.price}</span>
+          <span className="font-display text-2xl text-foreground">Rs {pizza.price.toLocaleString("en-PK")}</span>
           <button
             onClick={() => {
               add(pizza.id);
