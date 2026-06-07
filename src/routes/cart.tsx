@@ -13,8 +13,9 @@ export const Route = createFileRoute("/cart")({
   component: CartPage,
 });
 
-const DELIVERY_FEE = 4;
-const TAX_RATE = 0.08875;
+const DELIVERY_FEE = 200;
+
+const fmt = (n: number) => `Rs ${n.toLocaleString("en-PK", { maximumFractionDigits: 0 })}`;
 
 function CartPage() {
   const { items, setQty, remove } = useCart();
@@ -28,8 +29,7 @@ function CartPage() {
     .filter((l): l is NonNullable<typeof l> => l !== null);
 
   const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
-  const tax = subtotal * TAX_RATE;
-  const total = subtotal > 0 ? subtotal + tax + DELIVERY_FEE : 0;
+  const total = subtotal > 0 ? subtotal + DELIVERY_FEE : 0;
 
   if (lines.length === 0) {
     return (
