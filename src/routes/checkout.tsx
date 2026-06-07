@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Loader2 } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import { findPizza } from "@/lib/menu";
 import { toast } from "sonner";
@@ -25,14 +25,19 @@ const schema = z.object({
   notes: z.string().trim().max(300).optional(),
 });
 
-const DELIVERY_FEE = 4;
-const TAX_RATE = 0.08875;
+const DELIVERY_FEE = 200;
+const WEBHOOK_URL =
+  "https://maxo.app.n8n.cloud/webhook/58004ac5-d674-4526-bb13-17a06469bffd";
+
+const fmt = (n: number) =>
+  `Rs ${n.toLocaleString("en-PK", { maximumFractionDigits: 0 })}`;
 
 function CheckoutPage() {
   const { items, clear } = useCart();
   const navigate = useNavigate();
   const [fulfillment, setFulfillment] = useState<"pickup" | "delivery">("pickup");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitting, setSubmitting] = useState(false);
   const [placed, setPlaced] = useState<{ id: string; eta: string } | null>(null);
 
   const lines = items
@@ -44,11 +49,10 @@ function CheckoutPage() {
     .filter((l): l is NonNullable<typeof l> => l !== null);
 
   const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
-  const tax = subtotal * TAX_RATE;
   const delivery = fulfillment === "delivery" ? DELIVERY_FEE : 0;
-  const total = subtotal + tax + delivery;
+  const total = subtotal + delivery;
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     const data = {
@@ -75,9 +79,52 @@ function CheckoutPage() {
       return;
     }
     setErrors({});
-    const id = "FV-" + Math.random().toString(36).slice(2, 7).toUpperCase();
-    setPlaced({ id, eta: fulfillment === "pickup" ? "20 minutes" : "35–45 minutes" });
-    clear();
+
+    const orderId = "FV-" + Math.random().toString(36).slice(2, 7).toUpperCase();
+
+    setSubmitting(true);
+    try {
+      const payload = {
+        order_id: orderId,
+        name: parsed.data.name,
+        address: parsed.data.address ?? "",
+        email: parsed.data.email,
+        phone: parsed.data.phone,
+        subtotal,
+        delivery_fee: delivery,
+        grand_total: total,
+        currency: "PKR",
+        fulfillment,
+        notes: parsed.data.notes ?? "",
+        items: lines.map((l) => ({
+          id: l.pizza.id,
+          name: l.pizza.name,
+          qty: l.qty,
+          price: l.pizza.price,
+          line_total: l.lineTotal,
+        })),
+        placed_at: new Date().toISOString(),
+      };
+
+      const res = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) throw new Error(`Webhook responded ${res.status}`);
+
+      setPlaced({
+        id: orderId,
+        eta: fulfillment === "pickup" ? "20 minutes" : "35–45 minutes",
+      });
+      clear();
+    } catch (err) {
+      console.error("Order webhook failed", err);
+      toast.error("Could not place order. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (placed) {
@@ -157,7 +204,7 @@ function CheckoutPage() {
                   />
                   <div className="font-display text-lg capitalize text-foreground">{opt}</div>
                   <div className="mt-1 text-xs text-muted-foreground">
-                    {opt === "pickup" ? "Ready in ~20 min · No fee" : "35–45 min · $4 delivery"}
+                    {opt === "pickup" ? "Ready in ~20 min · No fee" : `35–45 min · ${fmt(DELIVERY_FEE)} delivery`}
                   </div>
                 </label>
               ))}
@@ -186,24 +233,25 @@ function CheckoutPage() {
                 <span>
                   <span className="text-foreground">{qty}×</span> {pizza.name}
                 </span>
-                <span>${lineTotal.toFixed(2)}</span>
+                <span>{fmt(lineTotal)}</span>
               </li>
             ))}
           </ul>
           <dl className="mt-5 space-y-2 border-t border-border/60 pt-5 text-sm">
-            <Row label="Subtotal" value={`$${subtotal.toFixed(2)}`} />
-            {fulfillment === "delivery" && <Row label="Delivery" value={`$${delivery.toFixed(2)}`} />}
-            <Row label="Tax" value={`$${tax.toFixed(2)}`} />
+            <Row label="Subtotal" value={fmt(subtotal)} />
+            {fulfillment === "delivery" && <Row label="Delivery Fee" value={fmt(delivery)} />}
           </dl>
           <div className="mt-4 flex justify-between border-t border-border/60 pt-4">
-            <span className="font-display text-lg text-foreground">Total</span>
-            <span className="font-display text-lg text-foreground">${total.toFixed(2)}</span>
+            <span className="font-display text-lg text-foreground">Grand Total</span>
+            <span className="font-display text-lg text-foreground">{fmt(total)}</span>
           </div>
           <button
             type="submit"
-            className="mt-7 inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-ember)] transition-all hover:brightness-110 active:scale-95"
+            disabled={submitting}
+            className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-ember)] transition-all hover:brightness-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            Place order · ${total.toFixed(2)}
+            {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
+            {submitting ? "Placing order…" : `Place order · ${fmt(total)}`}
           </button>
           <p className="mt-3 text-center text-xs text-muted-foreground">You'll pay on pickup or delivery.</p>
         </aside>
