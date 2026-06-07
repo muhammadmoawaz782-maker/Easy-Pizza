@@ -97,7 +97,7 @@ function CheckoutPage() {
           dateStyle: "medium",
           timeStyle: "short",
         }),
-        "Note": parsed.data.notes && parsed.data.notes.length > 0 ? parsed.data.notes : null,
+        "Note": parsed.data.notes && parsed.data.notes.length > 0 ? parsed.data.notes : "NULL",
       };
 
       const res = await fetch(WEBHOOK_URL, {
