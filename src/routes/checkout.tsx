@@ -84,30 +84,20 @@ function CheckoutPage() {
     setSubmitting(true);
     try {
       const payload = {
-        order_id: orderId,
-        name: parsed.data.name,
-        address: parsed.data.address ?? "",
-        email: parsed.data.email,
-        phone: parsed.data.phone,
-        subtotal,
-        delivery_fee: delivery,
-        grand_total: total,
-        currency: "PKR",
-        fulfillment,
-        notes: parsed.data.notes ?? "",
-        items: lines.map((l) => ({
-          id: l.pizza.id,
-          name: l.pizza.name,
-          qty: l.qty,
-          price: l.pizza.price,
-          line_total: l.lineTotal,
-        })),
-        placed_at: new Date().toISOString(),
-        time: new Date().toLocaleString("en-PK", {
+        "Order ID": orderId,
+        "Name": parsed.data.name,
+        "Address": parsed.data.address ?? "",
+        "Email": parsed.data.email,
+        "Phone": parsed.data.phone,
+        "Subtotal": subtotal,
+        "Delivery Fee": delivery,
+        "Grand Total": total,
+        "Time": new Date().toLocaleString("en-PK", {
           timeZone: "Asia/Karachi",
           dateStyle: "medium",
           timeStyle: "short",
         }),
+        "Note": parsed.data.notes ?? "",
       };
 
       const res = await fetch(WEBHOOK_URL, {
