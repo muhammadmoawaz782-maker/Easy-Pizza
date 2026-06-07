@@ -72,7 +72,7 @@ function CartPage() {
                     <p className="font-display text-xs italic text-primary">{pizza.italian}</p>
                     <h3 className="font-display text-xl text-foreground">{pizza.name}</h3>
                   </div>
-                  <p className="font-display text-lg text-foreground">${lineTotal.toFixed(2)}</p>
+                  <p className="font-display text-lg text-foreground">{fmt(lineTotal)}</p>
                 </div>
                 <div className="mt-auto flex items-center justify-between pt-3">
                   <div className="inline-flex items-center gap-1 rounded-full border border-border bg-background/60 p-1">
