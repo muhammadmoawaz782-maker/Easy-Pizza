@@ -26,8 +26,7 @@ const schema = z.object({
 });
 
 const DELIVERY_FEE = 200;
-const WEBHOOK_URL =
-  "https://maxo.app.n8n.cloud/webhook/58004ac5-d674-4526-bb13-17a06469bffd";
+const WEBHOOK_URL = "/api/place-order";
 
 const fmt = (n: number) =>
   `Rs ${n.toLocaleString("en-PK", { maximumFractionDigits: 0 })}`;
