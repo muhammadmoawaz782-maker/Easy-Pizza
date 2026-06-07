@@ -111,7 +111,13 @@ function CheckoutPage() {
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error(`Webhook responded ${res.status}`);
+      const result = (await res.json().catch(() => null)) as
+        | { ok?: boolean; message?: string }
+        | null;
+
+      if (!res.ok || !result?.ok) {
+        throw new Error(result?.message ?? `Webhook responded ${res.status}`);
+      }
 
       setPlaced({
         id: orderId,
@@ -120,7 +126,7 @@ function CheckoutPage() {
       clear();
     } catch (err) {
       console.error("Order webhook failed", err);
-      toast.error("Could not place order. Please try again.");
+      toast.error(err instanceof Error ? err.message : "Could not place order. Please try again.");
     } finally {
       setSubmitting(false);
     }
