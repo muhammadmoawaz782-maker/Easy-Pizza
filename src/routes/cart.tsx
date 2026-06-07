@@ -6,7 +6,7 @@ import { findPizza } from "@/lib/menu";
 export const Route = createFileRoute("/cart")({
   head: () => ({
     meta: [
-      { title: "Your Order — Forno Vero" },
+      { title: "Your Order — Easy Pizza" },
       { name: "description", content: "Review your pizza order before checkout." },
     ],
   }),

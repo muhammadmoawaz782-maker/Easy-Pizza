@@ -7,7 +7,7 @@ export function SiteFooter() {
         <div>
           <div className="flex items-center gap-2 text-foreground">
             <Flame className="h-5 w-5 text-primary" />
-            <span className="font-display text-xl">Forno Vero</span>
+            <span className="font-display text-xl">Easy Pizza</span>
           </div>
           <p className="mt-3 max-w-xs text-sm text-muted-foreground">
             Neapolitan pizza, fired in a 900&deg; wood oven. Made by hand since 2014.
@@ -30,7 +30,7 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="border-t border-border/40 py-5 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} Forno Vero. All rights reserved.
+        © {new Date().getFullYear()} Easy Pizza. All rights reserved.
       </div>
     </footer>
   );
