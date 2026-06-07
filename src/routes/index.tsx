@@ -7,9 +7,9 @@ import { Flame, Clock, Leaf } from "lucide-react";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Forno Vero — Wood-Fired Neapolitan Pizza in Brooklyn" },
+      { title: "Easy Pizza — Wood-Fired Neapolitan Pizza in Brooklyn" },
       { name: "description", content: "Hand-stretched Neapolitan pizza, fired in a 900° wood oven. Order online for pickup or delivery in Brooklyn." },
-      { property: "og:title", content: "Forno Vero — Wood-Fired Neapolitan Pizza" },
+      { property: "og:title", content: "Easy Pizza — Wood-Fired Neapolitan Pizza" },
       { property: "og:description", content: "Hand-stretched Neapolitan pizza, fired in a 900° wood oven." },
     ],
   }),
@@ -37,7 +37,7 @@ function Index() {
         <div className="relative mx-auto grid min-h-[88vh] max-w-7xl items-center gap-8 px-6 py-24">
           <div className="max-w-2xl">
             <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.3em] text-primary">
-              <Flame className="h-3.5 w-3.5" /> Forno Vero · Brooklyn
+              <Flame className="h-3.5 w-3.5" /> Easy Pizza · Brooklyn
             </p>
             <h1 className="mt-6 font-display text-6xl leading-[0.95] text-foreground text-balance sm:text-7xl md:text-8xl">
               Fired at <span className="italic text-primary">900°</span>,<br />

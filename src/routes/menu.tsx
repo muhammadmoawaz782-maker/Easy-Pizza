@@ -5,9 +5,9 @@ import { pizzas } from "@/lib/menu";
 export const Route = createFileRoute("/menu")({
   head: () => ({
     meta: [
-      { title: "Menu — Forno Vero" },
+      { title: "Menu — Easy Pizza" },
       { name: "description", content: "Our full menu of wood-fired Neapolitan pizzas. Order online for pickup or delivery." },
-      { property: "og:title", content: "Menu — Forno Vero" },
+      { property: "og:title", content: "Menu — Easy Pizza" },
       { property: "og:description", content: "Wood-fired Neapolitan pizzas, made to order." },
     ],
   }),

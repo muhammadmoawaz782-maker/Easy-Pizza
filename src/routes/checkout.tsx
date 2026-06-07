@@ -9,7 +9,7 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/checkout")({
   head: () => ({
     meta: [
-      { title: "Checkout — Forno Vero" },
+      { title: "Checkout — Easy Pizza" },
       { name: "description", content: "Complete your pizza order." },
     ],
   }),

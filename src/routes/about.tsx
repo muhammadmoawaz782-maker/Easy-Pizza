@@ -4,9 +4,9 @@ import heroImg from "@/assets/hero-pizza.jpg";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "Our Story — Forno Vero" },
+      { title: "Our Story — Easy Pizza" },
       { name: "description", content: "How a Brooklyn pizzaiolo built a 900° wood oven by hand and started making the city's best Neapolitan pizza." },
-      { property: "og:title", content: "Our Story — Forno Vero" },
+      { property: "og:title", content: "Our Story — Easy Pizza" },
       { property: "og:description", content: "How we make Neapolitan pizza, by hand, since 2014." },
     ],
   }),
