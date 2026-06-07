@@ -97,7 +97,7 @@ function CheckoutPage() {
           dateStyle: "medium",
           timeStyle: "short",
         }),
-        "Note": parsed.data.notes ?? "",
+        "Note": parsed.data.notes && parsed.data.notes.length > 0 ? parsed.data.notes : null,
       };
 
       const res = await fetch(WEBHOOK_URL, {
@@ -214,7 +214,7 @@ function CheckoutPage() {
             )}
           </Fieldset>
 
-          <Fieldset legend="Anything we should know?">
+          <Fieldset legend="Anything we should know? (optional)">
             <textarea
               name="notes"
               rows={3}
