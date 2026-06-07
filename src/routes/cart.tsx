@@ -13,8 +13,9 @@ export const Route = createFileRoute("/cart")({
   component: CartPage,
 });
 
-const DELIVERY_FEE = 4;
-const TAX_RATE = 0.08875;
+const DELIVERY_FEE = 200;
+
+const fmt = (n: number) => `Rs ${n.toLocaleString("en-PK", { maximumFractionDigits: 0 })}`;
 
 function CartPage() {
   const { items, setQty, remove } = useCart();
@@ -28,8 +29,7 @@ function CartPage() {
     .filter((l): l is NonNullable<typeof l> => l !== null);
 
   const subtotal = lines.reduce((s, l) => s + l.lineTotal, 0);
-  const tax = subtotal * TAX_RATE;
-  const total = subtotal > 0 ? subtotal + tax + DELIVERY_FEE : 0;
+  const total = subtotal > 0 ? subtotal + DELIVERY_FEE : 0;
 
   if (lines.length === 0) {
     return (
@@ -72,7 +72,7 @@ function CartPage() {
                     <p className="font-display text-xs italic text-primary">{pizza.italian}</p>
                     <h3 className="font-display text-xl text-foreground">{pizza.name}</h3>
                   </div>
-                  <p className="font-display text-lg text-foreground">${lineTotal.toFixed(2)}</p>
+                  <p className="font-display text-lg text-foreground">{fmt(lineTotal)}</p>
                 </div>
                 <div className="mt-auto flex items-center justify-between pt-3">
                   <div className="inline-flex items-center gap-1 rounded-full border border-border bg-background/60 p-1">
@@ -108,17 +108,14 @@ function CartPage() {
           <h2 className="font-display text-2xl text-foreground">Summary</h2>
           <dl className="mt-6 space-y-3 text-sm">
             <div className="flex justify-between text-muted-foreground">
-              <dt>Subtotal</dt><dd>${subtotal.toFixed(2)}</dd>
+              <dt>Subtotal</dt><dd>{fmt(subtotal)}</dd>
             </div>
             <div className="flex justify-between text-muted-foreground">
-              <dt>Delivery</dt><dd>${DELIVERY_FEE.toFixed(2)}</dd>
-            </div>
-            <div className="flex justify-between text-muted-foreground">
-              <dt>Tax</dt><dd>${tax.toFixed(2)}</dd>
+              <dt>Delivery Fee</dt><dd>{fmt(DELIVERY_FEE)}</dd>
             </div>
             <div className="mt-4 flex justify-between border-t border-border/60 pt-4 text-foreground">
-              <dt className="font-display text-lg">Total</dt>
-              <dd className="font-display text-lg">${total.toFixed(2)}</dd>
+              <dt className="font-display text-lg">Grand Total</dt>
+              <dd className="font-display text-lg">{fmt(total)}</dd>
             </div>
           </dl>
           <Link
