@@ -116,7 +116,7 @@ function CheckoutPage() {
 
       setPlaced({
         id: orderId,
-        eta: fulfillment === "pickup" ? "20 minutes" : "35–45 minutes",
+        eta: "35–45 minutes",
       });
       clear();
     } catch (err) {
