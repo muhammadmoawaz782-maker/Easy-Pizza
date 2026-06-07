@@ -108,17 +108,14 @@ function CartPage() {
           <h2 className="font-display text-2xl text-foreground">Summary</h2>
           <dl className="mt-6 space-y-3 text-sm">
             <div className="flex justify-between text-muted-foreground">
-              <dt>Subtotal</dt><dd>${subtotal.toFixed(2)}</dd>
+              <dt>Subtotal</dt><dd>{fmt(subtotal)}</dd>
             </div>
             <div className="flex justify-between text-muted-foreground">
-              <dt>Delivery</dt><dd>${DELIVERY_FEE.toFixed(2)}</dd>
-            </div>
-            <div className="flex justify-between text-muted-foreground">
-              <dt>Tax</dt><dd>${tax.toFixed(2)}</dd>
+              <dt>Delivery Fee</dt><dd>{fmt(DELIVERY_FEE)}</dd>
             </div>
             <div className="mt-4 flex justify-between border-t border-border/60 pt-4 text-foreground">
-              <dt className="font-display text-lg">Total</dt>
-              <dd className="font-display text-lg">${total.toFixed(2)}</dd>
+              <dt className="font-display text-lg">Grand Total</dt>
+              <dd className="font-display text-lg">{fmt(total)}</dd>
             </div>
           </dl>
           <Link
