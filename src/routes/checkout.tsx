@@ -34,7 +34,7 @@ const fmt = (n: number) =>
 function CheckoutPage() {
   const { items, clear } = useCart();
   const navigate = useNavigate();
-  const [fulfillment, setFulfillment] = useState<"pickup" | "delivery">("pickup");
+  const fulfillment = "delivery" as const;
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [placed, setPlaced] = useState<{ id: string; eta: string } | null>(null);
@@ -116,7 +116,7 @@ function CheckoutPage() {
 
       setPlaced({
         id: orderId,
-        eta: fulfillment === "pickup" ? "20 minutes" : "35–45 minutes",
+        eta: "35–45 minutes",
       });
       clear();
     } catch (err) {
@@ -183,35 +183,11 @@ function CheckoutPage() {
             </div>
           </Fieldset>
 
-          <Fieldset legend="How would you like it?">
-            <div className="grid gap-3 sm:grid-cols-2">
-              {(["pickup", "delivery"] as const).map((opt) => (
-                <label
-                  key={opt}
-                  className={`cursor-pointer rounded-xl border p-4 transition-colors ${
-                    fulfillment === opt
-                      ? "border-primary bg-primary/10"
-                      : "border-border bg-background/40 hover:border-border/80"
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="fulfillment"
-                    value={opt}
-                    checked={fulfillment === opt}
-                    onChange={() => setFulfillment(opt)}
-                    className="sr-only"
-                  />
-                  <div className="font-display text-lg capitalize text-foreground">{opt}</div>
-                  <div className="mt-1 text-xs text-muted-foreground">
-                    {opt === "pickup" ? "Ready in ~20 min · No fee" : `35–45 min · ${fmt(DELIVERY_FEE)} delivery`}
-                  </div>
-                </label>
-              ))}
-            </div>
-            {fulfillment === "delivery" && (
-              <Input name="address" label="Delivery address" error={errors.address} />
-            )}
+          <Fieldset legend="Delivery">
+            <p className="text-xs text-muted-foreground">
+              35–45 min · {fmt(DELIVERY_FEE)} delivery fee
+            </p>
+            <Input name="address" label="Delivery address" error={errors.address} />
           </Fieldset>
 
           <Fieldset legend="Anything we should know? (optional)">
@@ -253,7 +229,7 @@ function CheckoutPage() {
             {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
             {submitting ? "Placing order…" : `Place order · ${fmt(total)}`}
           </button>
-          <p className="mt-3 text-center text-xs text-muted-foreground">You'll pay on pickup or delivery.</p>
+          <p className="mt-3 text-center text-xs text-muted-foreground">You'll pay on delivery.</p>
         </aside>
       </form>
     </section>
