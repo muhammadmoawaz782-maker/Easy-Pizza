@@ -9,7 +9,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
         <Link to="/" className="flex items-center gap-2 text-foreground">
           <Flame className="h-5 w-5 text-primary" />
-          <span className="font-display text-xl tracking-wide">Forno&nbsp;Vero</span>
+          <span className="font-display text-xl tracking-wide">Easy&nbsp;Pizza</span>
         </Link>
 
         <nav className="hidden items-center gap-8 text-sm md:flex">
