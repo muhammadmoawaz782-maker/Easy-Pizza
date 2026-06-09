@@ -16,6 +16,7 @@ import { Route as CartRouteImport } from './routes/cart'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ChatIndexRouteImport } from './routes/chat.index'
+import { Route as ChatThreadIdRouteImport } from './routes/chat.$threadId'
 import { Route as ApiPlaceOrderRouteImport } from './routes/api/place-order'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
@@ -54,6 +55,11 @@ const ChatIndexRoute = ChatIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ChatRoute,
 } as any)
+const ChatThreadIdRoute = ChatThreadIdRouteImport.update({
+  id: '/$threadId',
+  path: '/$threadId',
+  getParentRoute: () => ChatRoute,
+} as any)
 const ApiPlaceOrderRoute = ApiPlaceOrderRouteImport.update({
   id: '/api/place-order',
   path: '/api/place-order',
@@ -74,6 +80,7 @@ export interface FileRoutesByFullPath {
   '/menu': typeof MenuRoute
   '/api/chat': typeof ApiChatRoute
   '/api/place-order': typeof ApiPlaceOrderRoute
+  '/chat/$threadId': typeof ChatThreadIdRoute
   '/chat/': typeof ChatIndexRoute
 }
 export interface FileRoutesByTo {
@@ -84,6 +91,7 @@ export interface FileRoutesByTo {
   '/menu': typeof MenuRoute
   '/api/chat': typeof ApiChatRoute
   '/api/place-order': typeof ApiPlaceOrderRoute
+  '/chat/$threadId': typeof ChatThreadIdRoute
   '/chat': typeof ChatIndexRoute
 }
 export interface FileRoutesById {
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   '/menu': typeof MenuRoute
   '/api/chat': typeof ApiChatRoute
   '/api/place-order': typeof ApiPlaceOrderRoute
+  '/chat/$threadId': typeof ChatThreadIdRoute
   '/chat/': typeof ChatIndexRoute
 }
 export interface FileRouteTypes {
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
     | '/menu'
     | '/api/chat'
     | '/api/place-order'
+    | '/chat/$threadId'
     | '/chat/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
     | '/menu'
     | '/api/chat'
     | '/api/place-order'
+    | '/chat/$threadId'
     | '/chat'
   id:
     | '__root__'
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '/menu'
     | '/api/chat'
     | '/api/place-order'
+    | '/chat/$threadId'
     | '/chat/'
   fileRoutesById: FileRoutesById
 }
@@ -195,6 +207,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChatIndexRouteImport
       parentRoute: typeof ChatRoute
     }
+    '/chat/$threadId': {
+      id: '/chat/$threadId'
+      path: '/$threadId'
+      fullPath: '/chat/$threadId'
+      preLoaderRoute: typeof ChatThreadIdRouteImport
+      parentRoute: typeof ChatRoute
+    }
     '/api/place-order': {
       id: '/api/place-order'
       path: '/api/place-order'
@@ -213,10 +232,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface ChatRouteChildren {
+  ChatThreadIdRoute: typeof ChatThreadIdRoute
   ChatIndexRoute: typeof ChatIndexRoute
 }
 
 const ChatRouteChildren: ChatRouteChildren = {
+  ChatThreadIdRoute: ChatThreadIdRoute,
   ChatIndexRoute: ChatIndexRoute,
 }
 
