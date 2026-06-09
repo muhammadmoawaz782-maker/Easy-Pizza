@@ -11,9 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MenuRouteImport } from './routes/menu'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as ChatRouteImport } from './routes/chat'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ChatIndexRouteImport } from './routes/chat.index'
 import { Route as ApiPlaceOrderRouteImport } from './routes/api/place-order'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 
@@ -25,6 +27,11 @@ const MenuRoute = MenuRouteImport.update({
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChatRoute = ChatRouteImport.update({
+  id: '/chat',
+  path: '/chat',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CartRoute = CartRouteImport.update({
@@ -42,6 +49,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChatIndexRoute = ChatIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ChatRoute,
+} as any)
 const ApiPlaceOrderRoute = ApiPlaceOrderRouteImport.update({
   id: '/api/place-order',
   path: '/api/place-order',
@@ -57,10 +69,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/cart': typeof CartRoute
+  '/chat': typeof ChatRouteWithChildren
   '/checkout': typeof CheckoutRoute
   '/menu': typeof MenuRoute
   '/api/chat': typeof ApiChatRoute
   '/api/place-order': typeof ApiPlaceOrderRoute
+  '/chat/': typeof ChatIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,16 +84,19 @@ export interface FileRoutesByTo {
   '/menu': typeof MenuRoute
   '/api/chat': typeof ApiChatRoute
   '/api/place-order': typeof ApiPlaceOrderRoute
+  '/chat': typeof ChatIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/cart': typeof CartRoute
+  '/chat': typeof ChatRouteWithChildren
   '/checkout': typeof CheckoutRoute
   '/menu': typeof MenuRoute
   '/api/chat': typeof ApiChatRoute
   '/api/place-order': typeof ApiPlaceOrderRoute
+  '/chat/': typeof ChatIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -87,10 +104,12 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/cart'
+    | '/chat'
     | '/checkout'
     | '/menu'
     | '/api/chat'
     | '/api/place-order'
+    | '/chat/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,21 +119,25 @@ export interface FileRouteTypes {
     | '/menu'
     | '/api/chat'
     | '/api/place-order'
+    | '/chat'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/cart'
+    | '/chat'
     | '/checkout'
     | '/menu'
     | '/api/chat'
     | '/api/place-order'
+    | '/chat/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   CartRoute: typeof CartRoute
+  ChatRoute: typeof ChatRouteWithChildren
   CheckoutRoute: typeof CheckoutRoute
   MenuRoute: typeof MenuRoute
   ApiChatRoute: typeof ApiChatRoute
@@ -135,6 +158,13 @@ declare module '@tanstack/react-router' {
       path: '/checkout'
       fullPath: '/checkout'
       preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chat': {
+      id: '/chat'
+      path: '/chat'
+      fullPath: '/chat'
+      preLoaderRoute: typeof ChatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cart': {
@@ -158,6 +188,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/chat/': {
+      id: '/chat/'
+      path: '/'
+      fullPath: '/chat/'
+      preLoaderRoute: typeof ChatIndexRouteImport
+      parentRoute: typeof ChatRoute
+    }
     '/api/place-order': {
       id: '/api/place-order'
       path: '/api/place-order'
@@ -175,10 +212,21 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface ChatRouteChildren {
+  ChatIndexRoute: typeof ChatIndexRoute
+}
+
+const ChatRouteChildren: ChatRouteChildren = {
+  ChatIndexRoute: ChatIndexRoute,
+}
+
+const ChatRouteWithChildren = ChatRoute._addFileChildren(ChatRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   CartRoute: CartRoute,
+  ChatRoute: ChatRouteWithChildren,
   CheckoutRoute: CheckoutRoute,
   MenuRoute: MenuRoute,
   ApiChatRoute: ApiChatRoute,
