@@ -83,9 +83,9 @@ function ChatWindow({ threadId, initialMessages }: { threadId: string; initialMe
     saveThreads(all);
   }, [messages, status, threadId]);
 
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
-    textareaRef.current?.focus();
+    const el = document.querySelector<HTMLTextAreaElement>('textarea[data-slot="input-group-control"], textarea');
+    el?.focus();
   }, [threadId, status]);
 
   const handleSubmit = (msg: PromptInputMessage) => {
@@ -182,7 +182,7 @@ function ChatWindow({ threadId, initialMessages }: { threadId: string; initialMe
 
       <div className="border-t border-border/60 bg-background/70 p-3 backdrop-blur">
         <PromptInput onSubmit={handleSubmit}>
-          <PromptInputTextarea ref={textareaRef} placeholder="Ask about the menu or place an order…" />
+          <PromptInputTextarea placeholder="Ask about the menu or place an order…" />
           <PromptInputFooter className="justify-end">
             <PromptInputSubmit status={status} disabled={isLoading && status !== "streaming"} onStop={stop} />
           </PromptInputFooter>
