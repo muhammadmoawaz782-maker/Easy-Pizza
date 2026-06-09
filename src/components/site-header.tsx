@@ -22,6 +22,9 @@ export function SiteHeader() {
           <Link to="/about" className="text-muted-foreground transition-colors hover:text-foreground [&.active]:text-foreground">
             Our Story
           </Link>
+          <Link to="/chat" className="text-muted-foreground transition-colors hover:text-foreground [&.active]:text-foreground">
+            Chat
+          </Link>
         </nav>
 
         <Link
