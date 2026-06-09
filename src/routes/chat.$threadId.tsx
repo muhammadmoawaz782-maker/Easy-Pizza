@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
 import { useEffect, useMemo, useRef, useState } from "react";
+// keep useRef for persistedRef
 import { toast } from "sonner";
 import { Pizza, Wrench } from "lucide-react";
 import {
